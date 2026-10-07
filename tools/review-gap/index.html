@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Google Review Gap Calculator — Anti-Agency</title>
+<meta name="description" content="Free Google review calculator. Type your review count and the top business in your town. See how far behind you are and how long it takes to pass them. No sign-in.">
+<meta property="og:title" content="How far behind is your Google review count?">
+<meta property="og:description" content="Free review gap calculator. 30 seconds, no sign-in.">
+<meta property="og:image" content="https://anti-agency.co/avatar.png">
+<link rel="icon" href="/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1B1B21;--sig:#FF5B2E;--paper:#F3EEE5;--line:#33333b}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow-x:hidden}body{background:var(--ink);color:var(--paper);font-family:Archivo,system-ui,sans-serif;font-weight:500;line-height:1.4}
+a{color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 0;font-weight:800;font-size:18px}
+header a{text-decoration:none}
+header nav a{margin-left:24px;opacity:.8}
+header nav a:hover{opacity:1;color:var(--sig)}
+h1{font-weight:900;font-size:clamp(36px,7vw,84px);letter-spacing:-.04em;line-height:.98;margin:5vh 0 18px;max-width:950px}
+.lede{font-size:clamp(18px,2.2vw,24px);opacity:.85;max-width:720px}
+form{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:48px 0 0}
+label{display:flex;flex-direction:column;gap:8px;font-weight:800;font-size:15px}
+label small{font-weight:500;opacity:.6;font-size:13px}
+input{background:transparent;border:0;border-bottom:2px solid var(--line);color:var(--paper);font:900 clamp(32px,4vw,48px) Archivo,system-ui,sans-serif;padding:6px 0;width:100%;letter-spacing:-.02em}
+input:focus{outline:none;border-color:var(--sig)}
+#out{margin:56px 0 0;border-top:1px solid var(--line);padding-top:36px}
+.big{font-weight:900;font-size:clamp(40px,8vw,104px);letter-spacing:-.045em;line-height:.95}
+.big b{color:var(--sig)}
+.rows{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin:40px 0}
+.rows h2{font-weight:900;font-size:clamp(24px,3vw,36px);letter-spacing:-.02em;line-height:1.05;margin-bottom:10px}
+.rows p{opacity:.85;max-width:460px}
+.rows .hot h2{color:var(--sig)}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+button,.btn{background:var(--sig);color:var(--ink);font:900 18px Archivo,system-ui,sans-serif;padding:16px 24px;border:0;border-radius:2px;cursor:pointer;text-decoration:none;display:inline-block}
+button.ghost{background:transparent;color:var(--paper);border:2px solid var(--line)}
+button:hover,.btn:hover{background:var(--paper);color:var(--ink)}
+.note{font-size:14px;opacity:.55;margin-top:18px;max-width:760px}
+.slot{margin:72px 0 0;border:2px solid var(--line);padding:28px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.slot p{max-width:640px;font-size:18px}
+.slot p b{color:var(--sig)}
+.slot small{display:block;opacity:.55;font-size:13px;margin-top:6px}
+footer{border-top:1px solid var(--line);margin-top:72px;padding:28px 0 48px;font-size:15px;opacity:.6;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:820px){form{grid-template-columns:1fr 1fr}.rows{grid-template-columns:1fr;gap:28px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a href="/">ANTI-AGENCY</a><nav><a href="https://www.youtube.com/@anti_agencyco">YouTube</a></nav></header>
+
+<h1>How far behind are you on Google reviews?</h1>
+<p class="lede">Type four numbers. See your gap to the top business in your town, and how long it takes to pass them. No sign-in. Nothing is sent anywhere.</p>
+
+<form id="f" onsubmit="return false">
+<label>Your Google reviews<small>From your Google profile</small><input id="you" type="number" min="0" inputmode="numeric" value="28"></label>
+<label>Top business in town<small>Search your trade + city, take #1</small><input id="top" type="number" min="0" inputmode="numeric" value="240"></label>
+<label>Jobs you finish a month<small>Rough is fine</small><input id="jobs" type="number" min="0" inputmode="numeric" value="12"></label>
+<label>New reviews last month<small>Yours, not theirs</small><input id="pace" type="number" min="0" inputmode="numeric" value="1"></label>
+</form>
+
+<section id="out" aria-live="polite">
+<p class="big" id="headline"></p>
+<div class="rows">
+<div><h2 id="nowH"></h2><p id="nowP"></p></div>
+<div class="hot"><h2 id="askH"></h2><p id="askP"></p></div>
+</div>
+<div class="btns">
+<button id="share" type="button">Share my result</button>
+<button id="dl" class="ghost" type="button">Download card</button>
+</div>
+<p class="note">How we count: times are to close today's gap only. The top business keeps getting reviews too. "Ask everyone" assumes 1 in 4 customers you ask leaves a review. That is our guess, not Google data. Never ask only the happy customers. Google calls that review gating and can remove your reviews for it.</p>
+</section>
+
+<aside class="slot">
+<p><b>Rather not do this yourself?</b> Full disclosure: I run Trusted Local Reviews. It sets up the review asking for you and tracks your gap every month. From $97 a month.<small>This calculator is free and checks one rival, once. Monthly tracking is the paid part.</small></p>
+<a class="btn" href="https://trustedlocalreviews.org/#gap">Get a free gap report</a>
+</aside>
+
+<footer><span>Anti-Agency · anti-agency.co</span><span>Veteran-owned</span></footer>
+</div>
+
+<canvas id="card" width="1080" height="1080" hidden></canvas>
+<script>
+const $=id=>document.getElementById(id);
+const n=id=>Math.max(0,Math.floor(+$(id).value||0));
+const fmt=x=>x.toLocaleString('en-US');
+const span=m=>m<1?'under a month':m<=24?Math.ceil(m)+' month'+(Math.ceil(m)===1?'':'s'):(m/12).toFixed(1).replace(/\.0$/,'')+' years';
+let R={};
+function calc(){
+  const you=n('you'),top=n('top'),jobs=n('jobs'),pace=n('pace');
+  const gap=Math.max(0,top-you), ask=jobs*0.25;
+  const tNow=pace>0?gap/pace:Infinity, tAsk=ask>0?gap/ask:Infinity;
+  R={you,top,gap,tNow,tAsk,ask};
+  if(!top){
+    $('headline').textContent='Type your numbers above.';
+    for(const k of ['nowH','nowP','askH','askP'])$(k).textContent='';return;
+  }
+  if(gap===0){
+    $('headline').innerHTML='You are <b>'+(you===top?'level':'ahead')+'</b>. Keep asking.';
+    $('nowH').textContent=you===top?'You are tied.':'You lead by '+fmt(you-top)+'.';
+    $('nowP').textContent='The top spot is yours to lose. Ask every customer so it stays that way.';
+    $('askH').textContent='';$('askP').textContent='';return;
+  }
+  $('headline').innerHTML='You are <b>'+fmt(gap)+'</b> reviews behind.';
+  $('nowH').textContent='At your pace: '+(tNow===Infinity?'never.':span(tNow)+'.');
+  $('nowP').textContent=tNow===Infinity
+    ?'You got no new reviews last month. The gap only grows.'
+    :'At '+pace+' a month, you close today\'s gap in '+span(tNow)+'. They keep adding reviews too, so the real wait is longer.';
+  $('askH').textContent='Ask every customer: '+(tAsk===Infinity?'enter your jobs.':span(tAsk)+'.');
+  $('askP').textContent=tAsk===Infinity?''
+    :'With '+jobs+' jobs a month, asking everyone gives about '+(Math.round(ask*10)/10)+' reviews a month. That is the whole trick.';
+}
+function draw(){
+  const c=$('card'),x=c.getContext('2d');
+  x.fillStyle='#1B1B21';x.fillRect(0,0,1080,1080);
+  x.fillStyle='#FF5B2E';x.fillRect(0,0,1080,16);
+  x.fillStyle='#F3EEE5';x.font='800 34px Archivo, sans-serif';x.fillText('ANTI-AGENCY · REVIEW GAP',72,110);
+  const wrap=(t,y,size,col,lh)=>{x.font='900 '+size+'px Archivo, sans-serif';x.fillStyle=col;let line='';for(const w of t.split(' ')){const tt=line?line+' '+w:w;if(x.measureText(tt).width>936&&line){x.fillText(line,72,y);y+=lh;line=w}else line=tt}x.fillText(line,72,y);return y+lh};
+  let y;
+  if(R.gap===0){wrap("I'm ahead of the top business in my town on Google reviews.",300,92,'#F3EEE5',96)}
+  else{
+    x.font='900 260px Archivo, sans-serif';x.fillStyle='#FF5B2E';x.fillText(fmt(R.gap),60,420);
+    y=wrap('Google reviews behind the top business in my town.',520,64,'#F3EEE5',72);
+    wrap('If I ask every customer: '+(R.tAsk===Infinity?'time to start.':span(R.tAsk)+' to close the gap.'),y+40,52,'#FF5B2E',60);
+  }
+  x.font='800 34px Archivo, sans-serif';x.fillStyle='#F3EEE5';x.globalAlpha=.7;x.fillText('Check yours free: anti-agency.co/tools/review-gap',72,1010);x.globalAlpha=1;
+  return new Promise(r=>c.toBlob(r,'image/png'));
+}
+async function dl(){const b=await draw();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-review-gap.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+$('dl').onclick=dl;
+$('share').onclick=async()=>{
+  const b=await draw(),f=new File([b],'my-review-gap.png',{type:'image/png'});
+  const text=R.gap?"I'm "+fmt(R.gap)+" Google reviews behind the top business in my town. Check yours:":"Check your Google review gap:";
+  try{
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text,url:location.href});return}
+    if(navigator.share){await navigator.share({text,url:location.href});return}
+  }catch(e){if(e.name==='AbortError')return}
+  dl();
+};
+$('f').addEventListener('input',calc);
+document.fonts.ready.then(calc);calc();
+</script>
+</body>
+</html>
